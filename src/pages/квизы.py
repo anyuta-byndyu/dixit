@@ -1,5 +1,8 @@
 import streamlit as st
 import base64
+import sqlite3
+conn= sqlite3.connect("data.db", check_same_thread= False)
+cur = conn.cursor()
 @st.cache_data
 def get_img_as_base64(file):
     with open(file, "rb") as f:
@@ -25,30 +28,12 @@ right: 5rem;
 </style>
 """
 st.markdown(page_bg_img, unsafe_allow_html=True)
-
-text_input = st.text_input(
-        "назавние проекта",
-    )
-if text_input:
-        st.markdown(text_input)
+cur.execute('SELECT * FROM addingquestions')
+data = cur.fetchall()
+conn.close()
 
 
-if 'n_rows' not in st.session_state:
-    st.session_state.n_rows = 1
 
-add = st.button(label=":green[+]")
-
-minus = st.button(label= ":green[-]")
-if minus:
-    st.session_state.n_rows -= 1
-    st.experimental_rerun()
-
-if add:
-    st.session_state.n_rows += 1
-    st.experimental_rerun()
-
-for i in range(st.session_state.n_rows):
-    st.text_input(label="вопрос", key=i)
 
 
 

@@ -1,5 +1,8 @@
 import streamlit as st
 import base64
+import sqlite3
+conn= sqlite3.connect("data.db", check_same_thread= False)
+cur = conn.cursor()
 @st.cache_data
 def get_img_as_base64(file):
     with open(file, "rb") as f:
@@ -26,53 +29,25 @@ right: 5rem;
 """
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
-personalinfo=[]
-def creds_entered():
-    if st.session_state["passwd1"].strip()== "admin" and st.session_state["passwd"].strip() == "admin":
-        st.session_state["authenticated"] = True
-    else:
-        st.session_state["authenticated"] = False
-        if not st.session_state["passwd"]:
-            st.header(" \n  \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n")
-            st.header(" \n  \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n")
-            st.warning("Пожалуйства введите пароль")
-        elif not st.session_state["user"]:
-            st.warning("Пожалуйства введите логин")
-        else:
-
-            st.error(" такого пароля быть не может :face_with_raised_eyebrow:")
-
-st.header(" \n  \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n")
-st.header(" \n  \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n")
-def authenticate_user():
-    if "authenticated" not in st.session_state:
-        st.text_input(label="придумайте пароль", value="", key="passwd1", type="password", on_change=creds_entered)
-        st.text_input(label="повторите пароль", value="", key="passwd", type="password", on_change=creds_entered)
-        return False
-    else:
-        if st.session_state["authenticated"]:
-            return True
-        else:
-            st.text_input(label="придумайте пароль", value="", key="passwd1", type="password", on_change=creds_entered)
-            st.text_input(label="повторите пароль", value="", key="passwd", type="password", on_change=creds_entered)
-            return False
-if authenticate_user():
-    st.write("you're in")
 
 
 
-
-
-st.header("    \n                                           Регестрация")
-st.date_input("ваш день рождения", key="bd")
-
-email = st.text_input('Почта', '@gmail.com')
-phonenum = st.text_input('номер телеофна', '+7')
-
-if st.button("зарегестрироваться"):
-    st.session_state.personalinfo
-.element {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background-color: lightgreen;}
+def regestration():
+    with st.form(key="user_id"):
+        name = st.text_input("важе имя: ")
+        surname = st.text_input("важа фамилия: ")
+        age = st.date_input("ваш день рождения", key="bd")
+        email = st.text_input('Почта', '@gmail.com')
+        phonenum = st.text_input('номер телеофна', '+7')
+        password = st.text_input("придумайте пароль: ")
+        repeatpassowrd = st.text_input(label="повторите пароль", value="", key="passwd1", type="password")
+        submission = st.form_submit_button(label="зарегестрироваться")
+        if submission == True:
+            add_user(name, surname, age, email, phonenum, password )
+def add_user(a,b,c,d,e,f):
+    cur.execute("""CREATE TABLE IF NOT EXISTS regestrationuser(NAME TEXT(50), SURNAME TEXT(50), AGE TEXT(50), EMAIL TEXT(50), PHONENUM TEXT(50), PASSWORD TEXT(50));""")
+    cur.execute("INSERT INTO regestrationuser VALUES (?,?,?,?,?,?)",(a,b,c,d,e,f))
+    conn.commit()
+    conn.close()
+    st.success("вы успешно зарегестрировались")
+regestration()
