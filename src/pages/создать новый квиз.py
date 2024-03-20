@@ -50,10 +50,13 @@ if add:
 
     def add_qustion(a, b, c, d, e):
         cur.execute(
-            """CREATE TABLE IF NOT EXISTS addingquestions(QUESITSELF TEXT(50), ANSWER1 TEXT(50), ANSWER2 TEXT(50), ANSWER3 TEXT(50), ANSWER4 TEXT(50));""")
+            """CREATE TABLE IF NOT EXISTS addingquestions
+                                    (QUESITSELF TEXT(50), ANSWER1 TEXT(50), ANSWER2 TEXT(50), ANSWER3 TEXT(50), ANSWER4 TEXT(50));""")
         cur.execute("INSERT INTO addingquestions VALUES (?,?,?,?,?)", (a, b, c, d, e))
         conn.commit()
+        cur.close()
         conn.close()
+
         st.success("вопрос добавлен")
 
 
@@ -65,5 +68,10 @@ if minus:
 
 
 
-
-
+cur= conn.cursor()
+cur.execute("SELECT * FROM addingquestions ")
+thedata = cur.fetchall()
+st.write('thedata')
+conn.commit()
+cur.close()
+conn.close()

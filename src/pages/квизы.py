@@ -1,7 +1,7 @@
 import streamlit as st
 import base64
 import sqlite3
-conn= sqlite3.connect("data.db", check_same_thread= False)
+conn = sqlite3.connect("data.db")
 cur = conn.cursor()
 @st.cache_data
 def get_img_as_base64(file):
@@ -28,8 +28,10 @@ right: 5rem;
 </style>
 """
 st.markdown(page_bg_img, unsafe_allow_html=True)
-cur.execute('SELECT * FROM addingquestions')
-data = cur.fetchall()
+data = cur.execute("SELECT answer1 * FROM addingquestions ORDER BY ln")
+for qes in data:
+    st.write(data)
+
 conn.close()
 
 

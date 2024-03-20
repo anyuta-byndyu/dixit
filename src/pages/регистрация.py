@@ -48,6 +48,7 @@ def add_user(a,b,c,d,e,f):
     cur.execute("""CREATE TABLE IF NOT EXISTS regestrationuser(NAME TEXT(50), SURNAME TEXT(50), AGE TEXT(50), EMAIL TEXT(50), PHONENUM TEXT(50), PASSWORD TEXT(50));""")
     cur.execute("INSERT INTO regestrationuser VALUES (?,?,?,?,?,?)",(a,b,c,d,e,f))
     conn.commit()
+    cur.close()
     conn.close()
     st.success("вы успешно зарегестрировались")
 regestration()
