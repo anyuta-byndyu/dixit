@@ -1,6 +1,6 @@
 import streamlit as st
 import base64
-
+import sqlite3
 @st.cache_data
 def get_img_as_base64(file):
     with open(file, "rb") as f:

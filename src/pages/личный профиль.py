@@ -1,7 +1,9 @@
 import streamlit as st
 import base64
 from streamlit_extras.stylable_container import stylable_container
+from streamlit_extras.add_vertical_space import add_vertical_space
 import pandas as pd
+import sqlite3
 @st.cache_data
 def get_img_as_base64(file):
     with open(file, "rb") as f:
@@ -29,34 +31,28 @@ right: 5rem;7
 """
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
-st.write("st.download_button, позволяет скачать данные сразу на комп")
 
-
-with stylable_container( #дополнительные функции из streamlit_extras.stylable_container import stylable_container
-    key="profile pic",
+with stylable_container(
+    key="profilepic",
     css_styles="""
-    div["data-testid="stImage"] > img {
-    position: absolute;
-    left: 310px;
-    border-radius: 90px;
-    object-fit: cover;
-    width: 170px;
-    height: 170px;
+    div[data-testid="stImage"] > img {
+        position: absolute;
+        left: 50%; /* Центрирование изображения по горизонтали */
+        transform: translateX(-50%); /* Сдвиг изображения влево на половину его ширины */
+        border-radius: 50%; /* Круглое обрезание изображения */
+        object-fit: cover;
+        width: 170px;
+        height: 170px;
     }
-    """,
-):
-    st.image('./shark.jpg')
-nick=st.write("profile nickname")
-st.markdown(
     """
-    <style>
-    
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-st.button(":green[создать новый квиз]")
-if button == "создать новый квиз":
+):
+    profilepic =st.image('./shark.jpg')
+
+num_lines = 10
+add_vertical_space(num_lines)
+
+new_quizz=st.button(":green[создать новый квиз]")
+if new_quizz == "создать новый квиз":
     switch_page("создание квиза")
 st.divider()
 data_df = pd.DataFrame(
